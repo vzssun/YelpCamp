@@ -1,7 +1,9 @@
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 import connectDB from './db/db.js';
-import Campground from './models/CampgroundSchema.js';
+import router from './routes/routes.js';
+import methodOverride from 'method-override';
 
 const app = express();
 
@@ -10,21 +12,16 @@ app.set('views', path.join(process.cwd(), 'views'));
 
 connectDB();
 
-app.get('/', (req, res) => {
-  res.render('home');
-});
-
-app.get('/makecampgrounds', (req, res) => {
-  const Campground1 = new Campground({
-    title: 'My Backyard',
-    price: 0,
-    description: 'Cheap camping in my backyard',
-    location: 'Philadelphia, PA'
-  });
-  Campground1.save();
-  res.send(Campground1);
-});
+app.use(router);
+app.use(cors({
+  origin: 'http://localhost:3000',
+  methods: 'GET,POST,PUT,DELETE',
+  allowedHeaders: 'Content',
+  optionsSuccessStatus: 200
+}));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
 app.listen(3000, () => {
-    console.log('Example app listening on port 3000!');
+  console.log('Listening on port 3000!');
 });
