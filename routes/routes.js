@@ -4,7 +4,10 @@ import Campground from '../models/CampgroundSchema.js';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('home');
+  const currentUser = 1;
+  const success = 'success';
+  const error = 'error';
+  res.render('home', { currentUser, success, error });
 });
 
 router.get('/campgrounds', async (req, res) => {
@@ -34,7 +37,7 @@ router.get('/campgrounds/:id/edit', async (req, res) => {
 
 router.put('/campgrounds/:id', async (req, res) => {
   const { id } = req.params;
-  const campground = await Campground.findByIdAndUpdate(id, req.body, { new: true });
+  const campground = await Campground.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
   res.redirect(`/campgrounds/${campground._id}`);
 });
 
@@ -42,6 +45,10 @@ router.delete('/campgrounds/:id', async (req, res) => {
   const { id } = req.params;
   await Campground.findByIdAndDelete(id);
   res.redirect('/campgrounds');
+});
+
+router.get('/error', (req, res) => {
+  throw new Error('This is a test error');
 });
 
 export default router;

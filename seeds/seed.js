@@ -14,11 +14,10 @@ seedDB().then(async () => {
     const random1000 = Math.floor(Math.random() * 1000);
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
-      location: `${cities[random1000].city}, ${cities[random1000].state}`,
       title: `${descriptors[Math.floor(Math.random() * descriptors.length)]} ${places[Math.floor(Math.random() * places.length)]}`,
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque.",
       price,
+      description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, eaque.",
+      location: `${cities[random1000].city}, ${cities[random1000].state}`,
     });
     await camp.save();
   }
